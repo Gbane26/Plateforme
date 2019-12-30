@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title> NaN - concours </title>
+
+        <!-- stylesheet ***************************************** -->
+        <link rel="stylesheet" href="/static/ressources/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="/static/ressources/css/datatable/datatable.bootstrap.css" /> 
+
+        <link rel="stylesheet" href="/static/ressources/css/main.css">
+        <!-- <link rel="stylesheet" href="/static/ressources/css/animate.css"> -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Lato:300,400&display=swap" rel="stylesheet">
+
+        <!-- favicons  ****************************************** -->
+        <link rel="apple-touch-icon" sizes="57x57" href="/static/ressources/images/favicons.ico/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="/static/ressources/images/favicons.ico/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/static/ressources/images/favicons.ico/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/static/ressources/images/favicons.ico/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/static/ressources/images/favicons.ico/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/static/ressources/images/favicons.ico/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/static/ressources/images/favicons.ico/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/static/ressources/images/favicons.ico/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/ressources/images/favicons.ico/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="/static/ressources/images/favicons.ico/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/ressources/images/favicons.ico/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="/static/ressources/images/favicons.ico/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/ressources/images/favicons.ico/favicon-16x16.png">
+        <link rel="manifest" href="/static/ressources/images/favicons.ico/manifest.json">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="/static/images/favicons.ico/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+
+        <style>
+            /* loader css start */
+            #loader {
+                position: fixed;
+                z-index: 10000000009;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: black;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .loader{
+
+                height: 100%;
+                background: #1c1d22;
+                text-align: center;
+                position: absolute;
+                width: 100%;
+            }
+            .loader > img{
+                max-height: 140px;
+            }
+
+            #loader > img {
+                width: 100px;
+            }
+
+        
+            #loader.hidden {
+                animation: fadeOut 1s;
+                animation-fill-mode: forwards;
+            }
+        
+            @keyframes fadeOut {
+                100% {
+                    opacity: 0;
+                    visibility: hidden;
+                }
+            }
+        
+            .thumb {
+                height: 100px;
+                border: 1px solid black;
+                margin: 10px;
+            }
+            #question-loader{
+                position: fixed;
+                z-index: 1000000000;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.7);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                
+            }
+            #question-loader > img{
+                width: 90px;
+            }
+            
+            /* loader css end */
+            
+        </style>
+        <script>
+            document.addEventListener('contextmenu', event => event.preventDefault());
+            window.addEventListener("load", function () {
+                const loader = document.querySelector("#loader");
+                loader.className += " hidden"; // class "loader hidden"
+    
+
+            });
+        </script>
+               
+        <!-- jquery ******************************************** -->
+        <script src="/static/ressources/js/jquery.min.js"></script>
+    </head>
+    <body>
+
+        <div id="loader" class="text-center">
+            <img class="center" src="/static/ressources/images/gif/Nan-logo-fast.gif" alt="Loading..." />
+        </div>
+        <div id="app">
+            <div id="question-loader" v-show="loader" class="text-center">
+                <img class="center" src="/static/ressources/images/gif/731.gif" alt="Loading..." />
+            </div>
+     
+
+ 
+      
+           <section class="main ">
+              
+            <div class="main-navbar">
+                <div id="user-circle" class="profil" style="background: url(/static/ressources/images/photo.png) center no-repeat; background-size: cover;">&nbsp;</div>
+                <div id="dropdown-user" class="profil-dropdown"  >
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="profil.html">Profil</a></li>
+                        <li><a href="login.html">Déconnexion</a></li>
+                    </ul>
+                </div>
+                <p class="nan" >Not A Number</p>
+
+            </div>
+
+            <div class="container-fluid">
+                
+                <div class="space-top-code">
+                        <div id="decompte" style="text-align: center;font-size: 3rem;" class="mb-5" ></div>
+                    <div class="page-container">
+                        
+                        <!-- Horizontal resizer -->
+                
+                        <div class="panel-container">
+                            
+                            <div class="panel-left">
+                                <div class="questions">
+                        
+                                    <!-- Accordion -->
+                                    <div class="accordion" id="accordionExample">
+                                        {% for q in exo %}
+                                        <div class="card card-bg">
+                                                
+                                            <div class="card-header" id='heading{{forloop.counter}}'>
+                                                <h2 class="mb-0">
+                                                <button class="btn btn-link"  v-on:click="getquestion('{{q.titre_slug}}',$event)"  type="button" data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="true" aria-controls="collapseOne">
+                                                    <!-- Question Number -->
+                                                    Question   {{ forloop.counter }}
+                                                </button>
+                                                </h2>
+                                            </div>
+                                        <div>
+
+                                       
+                                            <div id="collapse{{forloop.counter}}" class="collapse" aria-labelledby='heading{{forloop.counter}}' data-parent="#accordionExample" style="position: relative;">
+                                                <div class="card-body quest">
+                                
+                                                    <!-- Questions -->
+                                                    <div class="loader" v-show="loader"><img src="/static/ressources/images/gif/731.gif"  alt=""></div>
+                                                    <p style="color: gray;"> <span v-html="description"> </span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                        {% endfor %}
+ 
+                                    </div>
+                                </div>
+                            </div>
+                
+                            <div class="splitter">
+                                
+                            </div>
+                
+                            <div class="panel-right">
+                
+                                <!-- vertcal resizer -->
+                                <div class="panel-container-vertical">
+                
+                                    <div class="panel-top" style="position:relative;padding:0px">
+                                        <div class="buttons boutons-flottant" style="
+                                        position: absolute;
+                                        z-index: 222222222;
+                                        bottom: 10px;
+                                        right: 10px;
+                                        " >
+                                            <button v-if="test_loarder" type="submit" class="s-btn-2 btn"><img src="/static/ressources/images/gif/setting.gif" alt="settings-gears image" class="img-fluid img-soro"> Test</button>
+                                            <button v-if="!test_loarder" @click="tester" type="submit" class="s-btn-2 btn"><img src="/static/ressources/images/svg/settings-gears.svg" alt="settings-gears image" class="img-fluid img-soro"> Test</button>
+                                            <button  v-if="run_loarder" type="submit" class="p-btn-3 btn"><img src="/static/ressources/images/gif/Reload.gif" alt="recycle image" class="img-fluid img-soro" > Run</button>
+                                            <button v-if="!run_loarder" @click="runnig" type="submit" class="p-btn-3 btn"><img src="/static/ressources/images/svg/recycle.svg" alt="recycle image" class="img-fluid img-soro" > Run</button>
+                                        </div>
+                                    <div @paste.prevent style="height: 100%; width:100%">
+                                           
+                                        
+                                        <editor  editor-id="editorA"   :content="contentA" v-on:change-content="changeContentA" ></editor>
+                                    </div>
+                                        
+                                    </div>
+                        
+                                    <div class="splitter-horizontal">
+                                    </div>
+                        
+                                    <div class="panel-bottom" style="font-size:25px !important;">
+                                        <div class="loader" style="z-index: 10;background-color: #000;width: 97.8%;position:initial;" v-show="cons_loader"><img src="/static/ressources/images/gif/console_loader.gif" style="max-height: 140px;margin-top:5vh;"  alt=""></div>
+                                        <!-- result panel -->
+                                        <p> <span v-html="resultat" id='resultat'></span></p>
+                                    </div>
+                
+                                </div>
+                            </div>
+                            
+                        </div>
+                
+                    </div>
+                        
+                </div>
+            </div>
+
+
+           </section>
+    
+        </div>
+        
+        <!-- script ****************************************** -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.5/ace.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.5/ext-language_tools.js"></script> 
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="/static/ressources/js/bootstrap.min.js"></script>
+
+        <script src="/static/ressources/js/main.js"></script>
+        <!-- sweat alert script -->
+        <!-- <script src="sweetalert2.all.min.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <!-- end sweat alert script -->
+        <!-- script resizable -->
+         <script src="https://rawgit.com/RickStrahl/jquery-resizable/master/src/jquery-resizable.js"></script> 
+        <!-- // resizable script // -->
+        <script>
+            Vue.component('Editor', {
+                template: '<div :id="editorId" style="width: 100%; height: 100%;"></div>',
+                props: ['editorId', 'content', 'lang', 'theme'],
+                data () {
+                    return {
+                    editor: Object,
+                    beforeContent: '',
+                    }
+                },
+                watch: {
+                    'content' (value) {
+                        if (this.beforeContent !== value) {
+                            this.editor.setValue(value, 1)
+                        }
+                    }
+                },
+                mounted () {
+                    var lang = this.lang || "{{code}}"
+                    var theme = this.theme || 'ambiance'
+          
+                    this.editor = window.ace.edit(this.editorId)
+                    this.editor.setValue(this.content, 1)
+                    // disable paste event 
+                    this.editor.on('paste',(evt)=>{
+                        evt.event.preventDefault()
+                        evt.text = ""
+                    })
+                    // disable drop event 
+                    let editorEvents = ['dragenter', 'dragover', 'dragend', 'dragstart', 'dragleave', 'drop'];
+                    for (const events of editorEvents) {
+                         this.editor.container.addEventListener(events, function(e) { e.stopPropagation(); }, true); 
+                         }
+
+                    // mode-xxx.js or theme-xxx.jsがある場合のみ有効
+                    this.editor.getSession().setMode(`ace/mode/${lang}`)
+                    this.editor.setTheme(`ace/theme/${theme}`)
+                    this.editor.setOptions({
+                        highlightActiveLine: true,
+                        enableBasicAutocompletion: true,
+                        enableSnippets: true,
+                        enableLiveAutocompletion: true,
+                        vScrollBarAlwaysVisible: true,
+                        hScrollBarAlwaysVisible: true,
+                        showFoldWidgets: true,
+                        displayIndentGuides: false,
+                        fontSize: "15pt"
+                        
+                    });
+                    this.editor.setShowPrintMargin(false);
+
+                    this.editor.on('change', () => {
+                    this.beforeContent = this.editor.getValue()
+                    this.$emit('change-content', this.editor.getValue())
+                    })
+                }
+                })
+                const app = new Vue({
+                    el: "#app",
+                data () {
+                    return {
+                    contentA: "{{consigne}}",
+                    theme: 'cobalt',
+                    result: [],
+                    base_url:"",
+                    titre_slug:'',
+                    description:'',
+                    code_depart:'',
+                    resultat:'',
+                    id_lang : '{{id_lang}}',
+                    user  : '{{user}}',
+                    code_id : '{{code_id}}',
+                    epreuve : '{{nom_epreuve}}',
+                    secondeT : 1,
+                  
+                    test_loarder :false,
+                    run_loarder : false,
+
+                    loader:false,
+                    cons_loader:false,
+                    actual_question:NaN,
+                    }
+                },
+                delimiters:["${", "}"],
+                mounted(){
+            
+                    this.base_url = window.location.protocol + '//' + window.location.host + '/'
+                    const r = document.querySelector('#decompte');
+                    this.getTime('{{code_start}}','{{code_end}}',r);
+
+                },
+                methods: {
+                    reset () {
+                        this.contentA = ''
+            
+                    },
+                  
+           
+                    changeContentA (val) {
+                        if (this.contentA !== val) {
+                        this.contentA = val
+                  
+                    }
+                    },
+                    getcontentA(){
+                        //console.log(this.contentA)
+                    },
+                    getquestion(titre_slug,event) {
+                        // get collapse active
+
+                        let btn = event.srcElement
+                        let col = btn.getAttribute('data-target')
+                        col = document.querySelector(col)
+                        
+                        
+                        let is_open = col.classList.contains('show')
+                        
+                        // end get collapse active
+
+                        // start animated
+                        this.actual_question = col.closest('.card.card-bg')
+                        // col.classList.remove('show')
+
+                        
+                        // end animated
+                        if (!is_open){
+                            this.loader = true
+                            
+                            this.titre_slug = titre_slug
+                            axios.defaults.xsrfCookieName = 'csrftoken'
+                            axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+
+                            //console.log(titre_slug)
+                            axios({
+                                url: this.base_url + 'graphql',
+                                method: 'post',
+                                data: {
+                                    query: `
+                                    query{
+                                        allExercice(titreSlug:"${ this.titre_slug }"){
+                                            edges{
+                                            node{
+                                                description,
+                                                codeDepart,
+                                            }
+                                            }
+                                        }
+                                        }
+                            `
+                                }
+                            })
+                            .then(response => {
+                                this.loader=false
+                                this.result = response.data.data.allExercice.edges[0]
+                                this.description = this.result.node.description
+                                this.code_depart = this.result.node.codeDepart
+                                this.contentA = this.code_depart
+                                this.resultat = '',
+                            
+                                console.log(this.result)
+                                //console.log("data getting")
+                            
+
+                
+                                //console.log(this.description)
+                                this.content=true
+
+                            })
+                            .catch((err) => {
+                                this.loader=false
+                                console.log(err);
+                            })
+
+                        }
+                 },
+                 runnig: function() {
+                    
+
+                    this.cons_loader=true
+                    this.resultat = ''
+                    this.run_loarder=true
+                    let formData = new FormData();
+                    formData.append('contentA', this.contentA);
+                    formData.append('id_lang', this.id_lang );
+                    formData.append('exo_slug', this.titre_slug );
+                    formData.append('user', this.user );
+                    formData.append('code_id',this.code_id);
+                    formData.append('epreuve',this.epreuve);
+                    formData.append('date',new Date(Date.now()))
+
+                    axios.defaults.xsrfCookieName = 'csrftoken'
+                    axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+                    axios.post(this.base_url+'code', formData,  {headers: {'Content-Type': 'multipart/form-data',}})
+                    .then((response) => {
+                        console.log(response.data);
+                        this.resultat = response.data.resultat;
+                        console.log(this.resultat);
+                        console.log(this.id_lang)
+                        console.log(this.contentA);
+                        console.log(this.titre_code)
+                        this.cons_loader=false
+                        this.run_loarder=false
+                        is_success = response.data.succes
+                        console.log('succes = '+is_success)
+                        if (is_success){
+                            this.contentA = ''
+                            let nbquestion = document.querySelector('#accordionExample').children.length
+                            if (nbquestion == 1){
+                                Swal.fire({
+                                        title:'Good job!',
+                                        text:'you Validated all your quest',
+                                        icon:'success',
+                                        showClass: {
+                                            popup: 'animated fadeInDown faster'
+                                        },
+                                        hideClass: {
+                                            popup: 'animated fadeOutUp faster'
+                                        }
+                                    }).then((result)=>{
+                                        window.location = window.location.protocol + '//' + window.location.host + '/profil'
+                                    })
+                            }else{
+
+                                Swal.fire({
+                                        title:'Good job!',
+                                        text:'You valided the Question!',
+                                        icon:'success',
+                                        showClass: {
+                                            popup: 'animated fadeInDown faster'
+                                        },
+                                        hideClass: {
+                                            popup: 'animated fadeOutUp faster'
+                                        }
+                                }).then((result)=>{
+                                    this.actual_question.className += ' slideOutLeft animated'
+                                    this.resultat = ''
+                                    setTimeout(()=>{
+                                        this.actual_question.remove()
+                                    },1000)
+                                })
+                            }
+                            
+                        }
+                        
+                      
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        this.cons_loader=false
+                        this.run_loarder = false
+       
+                    })
+                },
+                tester: function() {
+                    this.cons_loader=true
+                    this.resultat = ''
+                    this.test_loarder = true
+                    let formData = new FormData();
+                    formData.append('contentA', this.contentA);
+                    formData.append('id_lang', this.id_lang );
+
+                    axios.defaults.xsrfCookieName = 'csrftoken'
+                    axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+                    axios.post(this.base_url+'tester', formData,  {headers: {'Content-Type': 'multipart/form-data',}})
+                    .then((response) => {
+                        console.log(response.data);
+                        this.resultat = response.data.resultat;
+                        this.cons_loader=false
+                        this.test_loarder =false
+                  
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        this.cons_loader=false
+                        this.test_loarder = false
+   
+                    })
+                },
+                getTime :(date_debut, date_fin,el) => {
+                    this.secondeT = 1
+
+
+                    let time = Math.round(new Date(date_fin).getTime() / 1000) - Math.round(new Date(Date.now()).getTime() / 1000);
+
+                    let decompt = setInterval(()=>{
+                            this.secondeT ++;
+                            let heur = parseInt((time - this.secondeT  +1) / 3600);
+                            let min = parseInt(((time - this.secondeT  +1) % 3600) / 60);
+                            let sec = ((time - this.secondeT  + 1)%86400) % 60;
+
+
+                            // attribution de la nouvelle valeur à afficher
+                            el.innerText = (heur < 10 ? "0" + heur : heur) + ":" + (min < 10 ? "0" + min : min) +":" + (sec < 10 ? "0" + sec : sec);
+                            if (time - this.secondeT  < 0) {
+                                clearInterval(decompt);
+                                Swal.fire({
+                                    title:'Good job!',
+                                    text:'Le live coding est arrivé a terme',
+                                    icon:'success',
+                                    showClass: {
+                                        popup: 'animated fadeInDown faster'
+                                    },
+                                    hideClass: {
+                                        popup: 'animated fadeOutUp faster'
+                                    }
+                                }).then((result)=>{
+                                    window.location = window.location.protocol + '//' + window.location.host + '/profil'
+                                })
+                                
+                                // execution a la fin du décompt;
+                            }
+                        },1000);
+                },
+                }
+            })
+
+            ///jquery resizable
+            $(".panel-left").resizable({
+                handleSelector: ".splitter",
+                resizeHeight: false
+            });
+
+            $(".panel-top").resizable({
+                handleSelector: ".splitter-horizontal",
+                resizeWidth: false
+            });
+
+            
+            // le lieu ou doit afficher le décompt;
+            
+
+
+
+            // intialisation 
+            
+
+        </script>
+ 
+    </body>
+</html>

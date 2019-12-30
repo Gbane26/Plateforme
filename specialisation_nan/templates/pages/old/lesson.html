@@ -1,0 +1,141 @@
+{% extends "bases/base_up.html" %}
+
+{% block title %}
+NaN - Concours : Mes Leçons!
+{% endblock title %}
+{% block style %}
+
+<link rel="stylesheet" href="/static/ressources/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/ressources/css/main.css">
+<link href="https://vjs.zencdn.net/7.6.5/video-js.css" rel="stylesheet">
+
+{% endblock style %}
+
+{% block jquery %}
+<script src="/static/ressources/js/jquery.min.js"></script>
+<script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+<script src='https://vjs.zencdn.net/7.6.5/video.js'></script>
+{% endblock jquery %}
+
+{% block content %}
+<div id="app">
+    <div class="course-box">
+        <div class="row">
+            <div class="col-12">
+                <div class="note my-shadow  center-content mb-5">
+                    <h3 class="mb-0">Test de spécialisation</h3>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div id="accordion">
+                        {% for item in epreuve.cours_epreuve.all %} 
+                        <div class="card">
+                                <div class="card-header" id="headingTwo" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+                                <!-- Mettre v-bind sur id et aria-controls -->
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed btn-accordeon" >
+                                    Leçon {{ forloop.counter}}
+                                    </button>
+                                </h5>
+                                </div>
+                                <div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                                <div class="card-body">
+                                    <h3> <span class="c-lesson-title"> titre:</span> <br>{{ item.titre }}</h3>
+                                    <br>
+                                    <h4 class="c-lesson-title">Desciption:</h4>
+                                    <h5> {{ item.description|safe }} 
+                                    </h5>
+                                    
+                                    <br>
+                                    <br>
+                                    <!-- pdf link -->
+                                    <a href="{% url 'pdf' item.id %}" target="_blank" class="btn1" >ressources pdf</a>
+            
+                                    <a href="" class="btn1" data-toggle="modal" data-target="#exampleModalCenter1">ressources video</a>
+                                    
+                                    <!-- video modal -->
+                                    <div class="videos">
+                                        <div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter1Title" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content video-content">
+                                                <div class="modal-body">
+                                                    <video id='my-video' class='video-js video-player' controls preload='auto'  height='364'
+                                                        poster='/static/ressources/videos/Snapshots/Tropical.jpg' data-setup='{}'>
+                                                            {% for v in item.video_cours.all %}
+                                                            <source src='{{ v.video.url }}' type='video/webm'>
+                                                            {% endfor %}
+                                                            <p class='vjs-no-js'>
+                                                            To view this video please enable JavaScript, and consider upgrading to a web browser that
+                                                            <a href='https://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a>
+                                                            </p>
+                                                    </video>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                        </div>
+                        {% endfor %}
+                    
+                    <br><br><br>
+                    <div>
+                        <a href="{% url 'quizz' epreuve.nom %}" class="btn1"> passer le quiz</a> &nbsp;
+                        <a href="{% url 'coding' epreuve.nom %}" class="btn1"> coding challenge</a>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javaScript %}
+
+<script src="/static/ressources/js/bootstrap.min.js"></script>
+<script src="/static/ressources/js/main.js"></script>
+
+{% endblock javaScript %}
+
+{% block vue %}
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                test: [1, 2, 3],
+            },
+            components: {
+                'lesson': httpVueLoader('/static/components/lesson.vue'),
+            },
+            delimiters: ["${", "}"],
+            mounted() {
+                        
+            },
+            methods: {
+                lesson:function(){
+                    this.base_url = 'https://localhost:8000'
+                    console.log('data getting')
+                    axios.defaults.xsrfCookieName = 'csrftoken'
+                    axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+                    axios({
+                        url: this.base_url + '/graphql',
+                        method: 'post',
+                        data: {
+                            query: `
+                            
+                            ` 
+                        }
+                    })
+                    .then(response => {
+                    
+                    })  
+                    .catch((err) => {
+                        console.log(err);
+                    })
+                },
+            },
+        });
+    </script>
+{% endblock vue %}

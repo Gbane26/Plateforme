@@ -1,0 +1,273 @@
+{% extends "bases/base_up.html" %}
+
+{% block title %}
+NaN - Concours : Mes Leçons!
+{% endblock title %}
+{% block style %}
+
+<!-- stylesheet ***************************************** -->
+<<link rel="stylesheet" href="/static/ressources/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/ressources/css/main.css">
+<link href="https://vjs.zencdn.net/7.6.5/video-js.css" rel="stylesheet">
+<style>
+    .lesson-icon{
+        max-height: 2rem;
+    }
+</style>
+
+{% endblock style %}
+
+{% block jquery %}
+<script src="/static/ressources/js/jquery.min.js"></script>
+<script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+<script src='https://vjs.zencdn.net/7.6.5/video.js'></script>
+{% endblock jquery %}
+{% block content %}
+<div class="course-box" id="app">
+    {% with epreuve.cours as cours %}
+    <div class="row">
+        <div class="col-12">
+            <div class="note center-content my-shadow   mb-5">
+                <h3 class="mb-0">Test de spécialisation</h3>
+            </div>
+            <div class="mb-5">
+                <h3> <span class="c-lesson-title"> titre:</span> <br> {{ cours.titre }}</h3>
+                <br>
+                <h4 class="c-lesson-title">Desciption:</h4>
+                <h5>{{ cours.description|safe }}
+                </h5>
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            {% with cours.pdf_cours.all as pdfs %}
+            {% if pdfs|length > 0 %}
+                <div id="accordion" style="margin-bottom: 1rem;">
+                    <div class="card">
+                        <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed btn-accordeon" >
+                                Ressources pdf 
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+                                <!-- pdf link -->
+                                <ul>
+                                    {% for pdf in pdfs %}
+                                    <li>
+                                        <a href="{% url 'pdf' pdf.id %}"  target="_blank" class="d-flex"><img src="/static/ressources/images/svg/pdf.svg" class="img-fluid lesson-icon" alt="pdf">&nbsp; <span>{{ pdf.titre }}</span></a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            {% endwith %}
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            {% with cours.video_cours.all as videos %}
+            {% if videos|length > 0 %}
+            <div id="accordion" style="margin-bottom: 3rem;">
+                <div class="card">
+                    <div class="card-header" id="headingUn" data-toggle="collapse" data-target="#collapseUn" aria-expanded="false" aria-controls="collapseUn">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed btn-accordeon" >
+                            Ressources vidéo 
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseUn" class="collapse" aria-labelledby="headingUn" data-parent="#accordion">
+                        <div class="card-body">
+                            <ul>
+                                {% for video in videos %}
+                                <li>
+                                    <a href=""  data-toggle="modal" data-target="#exampleModalCenter{{ forloop.counter }}" class="d-flex"><img src="/static/ressources/images/svg/camera.svg" class="img-fluid lesson-icon" alt="video">&nbsp; <span>{{ video.titre }}</span></a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <!-- video modal -->
+                            <div class="videos">
+                                {% for video in videos %}
+                                <div class="modal fade" id="exampleModalCenter{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter{{ forloop.counter }}Title" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content video-content">
+                                            <div class="modal-body">
+                                                <video id='my-video{{ forloop.counter }}' class='video-js video-player' controls preload='auto'  height='364'
+                                                    poster='/static/ressources/videos/Snapshots/Tropical.jpg' data-setup='{}'>
+                                                        <source src='{{ video.video.url }}' type='video/webm'>
+                                                        <p class='vjs-no-js'>
+                                                        To view this video please enable JavaScript, and consider upgrading to a web browser that
+                                                        <a href='https://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a>
+                                                        </p>
+                                                </video>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endwith %}
+        </div>
+        <div class="col-12 mb-5">
+            <div>
+                {% if epreuve.quizz %}
+                {% with epreuve.quizz as quizz %}
+                {% if quizz.statut and not hasquizz and quizz.is_available %}
+                <a href="{% url 'quizz' epreuve.nom %}" class="btn1"> passer le quiz ( temps restant <span id="timeQ">{{ quizz.time_available }}</span> )</a> &nbsp;
+                {% elif quizz.statut and quizz.is_comming %}
+                <div class="alert alert-primary" role="alert">
+                    Le quizz commence dans <span id="timeQ">{{ quizz.time_comming }}</span>
+                </div>
+                {% endif %}
+                {% endwith %}
+                {% endif %}
+                {% if epreuve.code %}
+                <a href="{% url 'coding' epreuve.nom %}" class="btn1"> coding challenge( temps restant <span id="timeC">1j 0h 0min 10s</span> )</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endwith %}
+</div>
+<br><br><br><br><br><br><br>
+
+{% endblock content %}
+{% block javaScript %}
+
+<script src="/static/ressources/js/bootstrap.min.js"></script>
+<script src="/static/ressources/js/main.js"></script>
+
+{% endblock javaScript %}
+
+{% block vue %}
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            invalide:false,
+            interC:'',
+            interQ:'',
+            base_url:window.location.protocol + "//" + window.location.host,
+            post_url: "{% url 'quizz_valider' epreuve.nom %}",
+        },
+        delimiters: ["${", "}"],
+        mounted() {
+            this.decompteC()
+            this.decompteQ()
+        },
+        methods: {
+            decompteQ:function(){
+                try{
+                    let time = document.querySelector('#timeQ')
+                    let tab = time.textContent.split(' ');
+                    let jour = parseInt(tab[0].slice(0,tab[0].indexOf("j")))
+                    let heure = parseInt(tab[1].slice(0,tab[1].indexOf("h")))
+                    let minu = parseInt(tab[2].slice(0,tab[2].indexOf("min")))
+                    let sec = parseInt(tab[3].slice(0,tab[3].indexOf("s")))
+                    let outputSec,outputMin, outputHeur, outputJour;
+                    this.interQ = setInterval(()=>{
+                            sec--;
+                            if(minu > 0){
+                                if(sec == -1){
+                                    sec = 59;
+                                    minu--;
+                                }
+                            }else if(heure>0){
+                                if(sec== -1){
+                                    minu = 59;
+                                    sec = 59;
+                                    heure--;
+                                }
+                            }
+                            else if(jour>0){
+                                if(sec==-1){
+                                    heure=23;
+                                    minu = 59;
+                                    sec = 59;
+                                    jour--;
+                                }
+                            }
+                            else{
+                                if(sec === 0){
+                                    clearInterval(this.interQ);
+                                    location.reload()
+                                }
+                            }
+                            outputJour = jour < 10 ? "0"+jour : jour;
+                            outputHeur = heure < 10 ? "0"+heure : heure
+                            outputSec = sec < 10 ? "0"+sec : sec;
+                            outputMin = minu < 10 ? "0"+minu : minu
+                            time.textContent = outputJour+"j "+outputHeur+"h "+outputMin+"min "+outputSec+"s";
+                    },1000);
+                }
+                catch(e){
+                    //pas
+                }
+            },
+            decompteC:function(){
+                try{
+                    let time = document.querySelector('#timeC')
+                    let tab = time.textContent.split(' ');
+                    let jour = parseInt(tab[0].slice(0,tab[0].indexOf("j")))
+                    let heure = parseInt(tab[1].slice(0,tab[1].indexOf("h")))
+                    let minu = parseInt(tab[2].slice(0,tab[2].indexOf("min")))
+                    let sec = parseInt(tab[3].slice(0,tab[3].indexOf("s")))
+                    let outputSec,outputMin, outputHeur, outputJour;
+                    this.interC = setInterval(()=>{
+                            sec--;
+                            if(minu > 0){
+                                if(sec == -1){
+                                    sec = 59;
+                                    minu--;
+                                }
+                            }else if(heure>0){
+                                if(sec== -1){
+                                    minu = 59;
+                                    sec = 59;
+                                    heure--;
+                                }
+                            }
+                            else if(jour>0){
+                                if(sec==-1){
+                                    heure=23;
+                                    minu = 59;
+                                    sec = 59;
+                                    jour--;
+                                }
+                            }
+                            else{
+                                if(sec === 0){
+                                    clearInterval(this.interC);
+                                    location.reload()
+                                }
+                            }
+                            outputJour = jour < 10 ? "0"+jour : jour;
+                            outputHeur = heure < 10 ? "0"+heure : heure
+                            outputSec = sec < 10 ? "0"+sec : sec;
+                            outputMin = minu < 10 ? "0"+minu : minu
+                            time.textContent = outputJour+"j "+outputHeur+"h "+outputMin+"min "+outputSec+"s";
+                    },1000);
+                }
+                catch(e){
+                    //pas
+                }
+            },
+        },
+    });
+</script>
+{% endblock vue %}
+
+
+    </body>
+</html>

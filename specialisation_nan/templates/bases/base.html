@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}
+    
+    {% endblock title %}</title>
+
+    <!-- stylesheet ***************************************** -->
+    <link rel="stylesheet" href="/static/ressources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/ressources/css/main.css">
+    <style>
+            /* loader css start */
+                #loader {
+                    position: fixed;
+                    z-index: 10000000000;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: black;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                #loader > img {
+                    width: 100px;
+                }
+    
+            
+                #loader.hidden {
+                    animation: fadeOut 1s;
+                    animation-fill-mode: forwards;
+                }
+            
+                @keyframes fadeOut {
+                    100% {
+                        opacity: 0;
+                        visibility: hidden;
+                    }
+                }
+            
+                .thumb {
+                    height: 100px;
+                    border: 1px solid black;
+                    margin: 10px;
+                }
+        </style>
+         <script>
+                // document.addEventListener('contextmenu', event => event.preventDefault());
+                window.addEventListener("load", function () {
+                    const loader = document.querySelector("#loader");
+                    loader.className += " hidden"; // class "loader hidden"
+        
+        
+                });
+            </script>
+    <!-- VueJS et Axios -->
+    <script src="/static/vue/vue.js"></script>
+    <script src="/static/vue/axios.min.js"></script>
+    <script src="/static/vue/httpVueLoader.min.js"></script>
+
+    <!-- favicons  ****************************************** -->
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/ressources/images/favicons.ico/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/ressources/images/favicons.ico//apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/ressources/images/favicons.ico//apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/ressources/images/favicons.ico//apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/ressources/images/favicons.ico//apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/ressources/images/favicons.ico//apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/ressources/images/favicons.ico//apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/ressources/images/favicons.ico//apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/ressources/images/favicons.ico//apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/ressources/images/favicons.ico//android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/ressources/images/favicons.ico//favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/ressources/images/favicons.ico//favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/ressources/images/favicons.ico//favicon-16x16.png">
+    <link rel="manifest" href="/static/ressources/images/favicons.ico//manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/static/images/favicons.ico/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <style>
+        .specilite{
+            position: absolute;
+            right:50%;
+            top: 2rem; 
+            z-index: 20000; 
+            font-size: 1.8rem;
+        }
+    </style>
+
+    <!-- jquery ******************************************** -->
+    <script src="/static/ressources/js/jquery.min.js"></script>
+
+
+</head>
+
+<body>
+    <div id="loader" class="text-center">
+        <img class="center" src="/static/ressources/images/gif/Nan-logo-fast.gif" alt="Loading..." />
+    </div>
+    <section class="main center-content">
+        {% block content %} {% endblock content %}
+        <div class="copyright">
+            <h4>plateforme concours</h4>
+            <h5>© DevsFront - Not A Number</h5>
+        </div>
+    </section>
+
+    <!-- script ****************************************** -->
+    <script src="/static/ressources/js/bootstrap.min.js"></script>
+    <script src="/static/ressources/js/main.js"></script>
+
+    {% block vue %} {% endblock vue %}
+</body>
+
+</html>

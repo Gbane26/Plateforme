@@ -1,0 +1,248 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+<!-- Override extrahead to add Chart.js -->
+{% block content %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Status</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col" colspan="4">#</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <td colspan="2">@mdo</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+                <div id="mainStatus" class="col-md-6" style="width: 100%;height:200px;"></div>
+            <div id="mainStat" class="col-md-6" style="width: 100%;height:200px;"></div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <h2>Genre</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col" >Masculin</th>
+                <th scope="col">Feminin</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>150</td>
+            <td>100</td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="mainGenres" class="col" style="width: 100%;height:200px;"></div>
+    </div>
+    <div class="col-md-4">
+        <h2>NaNplus</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col" >Plus de 25 ans</th>
+                <th scope="col">Moin de 25 ans</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>150</td>
+            <td>100</td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="mainPlus" class="col" style="width: 100%;height:200px;"></div>
+    </div>
+</div>
+<div id="main" style="width: 100%;height:400px;" class="m-4"></div>
+<hr><hr>
+
+
+<script src="/static/echarts.min.js"></script>
+
+<script type="text/javascript">
+    // based on prepared DOM, initialize echarts instance
+    var myChart = echarts.init(document.getElementById('main'));
+    var ChartGenres = echarts.init(document.getElementById('mainGenres'));
+    var ChartPlus = echarts.init(document.getElementById('mainPlus'));
+    var ChartStat = echarts.init(document.getElementById('mainStat'));
+    var ChartStatus = echarts.init(document.getElementById('mainStatus'));
+
+    // specify chart configuration item and data
+    var option = {
+        title: {
+            text: 'ECharts entry example'
+        },
+        tooltip: {},
+        legend: {
+            data:[
+            {% for m in chart_data %}
+            "{{m.titre}}",
+            {% endfor %}
+             ]
+        },
+        xAxis: {
+            data: [
+                {% for m in chart_data %}
+                "{{m.date}}",
+                {% endfor %}
+            ]
+        },
+        yAxis: {},
+        series: [{
+            name: 'Sales',
+            type: 'bar',
+            data: [
+                {% for m in chart_data %}
+                "{{m.titre}}",
+                {% endfor %}
+            ]
+        }]
+    };
+
+    //Graph genres
+    var optionGenres = {
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: ['Homme','Femme']
+        },
+        series : [
+            {
+                name: 'Genres',
+                type: 'pie',
+                radius : '55%',
+                center: ['50%', '60%'],
+                data:[
+                    {value:335, name:'Homme'},
+                    {value:310, name:'Femme'},
+                ],
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+    // Graph NaN plus ou moin
+
+    var optionPlus = {
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: ['Plus +','Moin -']
+        },
+        series : [
+            {
+                name: 'NaN+',
+                type: 'pie',
+                radius : '55%',
+                center: ['50%', '60%'],
+                data:[
+                    {value:234, name:'Plus +'},
+                    {value:1548, name:'Moin -'}
+                ],
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+    // Graph status
+   var  optionStat = {
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            x: 'left',
+            data:['Validé','Invalide']
+        },
+        series: [
+            {
+                name:'Status',
+                type:'pie',
+                radius: ['50%', '70%'],
+                avoidLabelOverlap: false,
+                label: {
+                    normal: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        show: true,
+                        textStyle: {
+                            fontSize: '30',
+                            fontWeight: 'bold'
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: false
+                    }
+                },
+                data:[
+                    {value:335, name:'Validé'},
+                    {value:310, name:'Invalide'},
+                ]
+            }
+        ]
+    };
+
+    var optionStatus = {
+        xAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            data: [120, 200, 150, 80, 70, 110, 130],
+            type: 'bar'
+        }]
+    };
+    
+
+    // use configuration item and data specified to show chart
+    myChart.setOption(option);
+    ChartGenres.setOption(optionGenres);
+    ChartPlus.setOption(optionPlus);
+    ChartStat.setOption(optionStat);
+    ChartStatus.setOption(optionStatus);
+
+</script>
+
+<!-- Render our chart -->
+
+
+<!-- Render the rest of the ChangeList view -->
+{{ block.super }}
+{% endblock %}

@@ -1,0 +1,257 @@
+{% extends "bases/base_center.html" %}
+{% load mathfilters %}
+
+{% block title %}
+NaN - Concours : Mon profile!
+{% endblock title %}
+{% block style %}
+
+<link rel="stylesheet" href="/static/ressources/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="/static/ressources/css/datatable/datatable.bootstrap.css" />
+<link rel="stylesheet" href="/static/ressources/css/main.css">
+
+{% endblock style %}
+
+{% block jquery %}
+<script src="/static/ressources/js/jquery.min.js"></script>
+{% endblock jquery %}
+
+{% block content %}
+  
+<div class="container">
+    <div class="space-top">
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4 col-xl-4">
+                <div class="user-card mb-4">
+                    <div class="profils">
+                    <div>
+                        <!-- <div class="image-circle text-cente"></div> -->
+                        <img class="image-circle text-cente" src="{{ user_profile.images.url }} " alt="">
+                        <h4 class="text-center username mt-3">{{ user.username }}</h4>
+                        <h5>{{ user.first_name }} {{ user.last_name }}</h5>
+                    </div>
+                    <a href="#" class="btn2" data-toggle="modal" data-target="#exampleModalCenter">Mes informations</a>
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Cursus front-end</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="">
+                                    <div class="form-group">
+                                        <input type="text" placeholder="Nom" required class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" placeholder="Prénoms" required class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" placeholder="Contacts" required class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" placeholder="Commune" required class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" placeholder="Photo" required class="form-control">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn1" data-dismiss="modal">retour</button>
+                                <button type="button" class="btn1 soumission" data-dismiss="modal" data-toggle="modal" data-target="#exampleModalCenterTwo" v-on:click="validequizz">valider</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    </div>
+                    <div class="profil-info pt-3">
+                    <h4>{{ user_profile.location }}</h4>
+                    <h4>{{ user.email }}</h4>
+                    <h4 class="mb-5">{{ user_profile.contacts }}</h4>
+                                
+            
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-7 col-lg-8 col-xl-8">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-general-tab" data-toggle="pill" href="#pills-general" role="tab" aria-controls="pills-general" aria-selected="true">Général</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-me-tab" data-toggle="pill" href="#pills-me" role="tab" aria-controls="pills-me" aria-selected="false">Mes résultats</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-general" role="tabpanel" aria-labelledby="pills-general-tab">
+                        <div class="mt-5">
+                            <div class="card br5 sz14 my-shadow" style="border: none">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="setting_defaults" class="table  table-bordered display" style="width:100%; font-size: 1.2rem;">
+                                            <thead>
+                                                <tr>
+                                                    <th style="border-bottom: none;border-top:none">Rang</th>
+                                                    <th style="border-bottom: none;border-top:none">Nom</th>
+                                                    <th style="border-bottom: none;border-top:none">Prénoms</th>
+                                                    <th style="border-bottom: none;border-top:none">Moyenne</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                
+                                                {% for item in classement %}
+                                                    
+                                                    {% if item.user == user %}
+                                                    <tr style="background-color: rgba(36, 202, 64, 0.5);">
+                                                        <td>{{ forloop.counter }}</td>
+                                                        <td>{{ item.user.first_name }}</td>
+                                                        <td>{{ item.user.last_name }}</td>
+                                                        <td>{{ item.moyenne }} %</td>
+                                                    </tr>
+                                                    {% else %}
+                                                    <tr>
+                                                        <td>{{ forloop.counter }}</td>
+                                                        <td>{{ item.user.first_name }}</td>
+                                                        <td>{{ item.user.last_name }}</td>
+                                                        <td>{{ item.moyenne }} %</td>
+                                                    </tr>
+                                                    {% endif %}
+
+                                                {% endfor %}
+                                                            
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-me" role="tabpanel" aria-labelledby="pills-me-tab">
+                            <div class="mt-5">
+                                <div class="card br5 sz14 my-shadow" style="border: none">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table id="row_group" class="table  table-bordered display" style="width:100%; font-size: 1.2rem;">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="border-bottom: none;border-top:none" class="anv-teal">Date</th>
+                                                        <th style="border-bottom: none;border-top:none" class="anv-teal">Rang</th>
+                                                        <th style="border-bottom: none;border-top:none" class="anv-teal">Date</th>                                                                    
+                                                        <th style="border-bottom: none;border-top:none" class="anv-teal">Temps mis</th>
+                                                        <th style="border-bottom: none;border-top:none" class="anv-teal">Statut</th>
+                                                        <th style="border-bottom: none;border-top:none" class="anv-teal">pourcentage</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    
+                                                    {% for item  in user_classement_by_quizz %}
+
+                                                        
+                                                        {% for i in item %}
+                                                            {% if i.quizz is Null %}
+                                                            
+                                                            {% elif i.user == user %}
+                                                            <tr>
+                                                                <td>  {{ i.date_add }}</td>
+                                                                <td> {{ forloop.counter }} /{{ specialite_all_user}}</td>
+                                                                <td>{{ i.quizz.titre }}</td>
+                                                                <td>{{ i.duree }}</td>
+
+                                                                {% if i.isvalide %}
+                                                                <td>
+                                                                    <span class="badge badge-pill badge-success">pass</span>
+                                                                </td>
+                                                                {% else %}
+                                                                <td>
+                                                                    <span class="badge badge-pill badge-danger">fail</span>
+                                                                </td>
+                                                                {% endif %}
+                                                            
+                                                            
+                                                                <td>
+                                                                    <!-- calc( {{ item.quizz.note}} *100 ) / {{ item.quizz.quizz.nbq }}  -->
+                                                                    {{ i.note }} %
+                                                                </td>
+                                                            </tr>
+                                                            {% endif %}
+                                                            
+                                                            
+                                                            
+                                                            
+                                                        {% endfor %}
+                                                    {% endfor %}
+
+                                                    {% for item  in user_classement_by_coding %}
+
+                                                        
+                                                        {% for i in item %}
+                                                            {% if i.code is Null %}
+                                                            
+                                                            {% elif i.user == user %}
+                                                            <tr>
+                                                                <td>  {{ i.date_add }}</td>
+                                                                <td> {{ forloop.counter }} /{{ specialite_all_user}}</td>
+                                                                <td>{{ i.code }}</td>
+                                                                <td> xxxx </td>
+
+                                                                {% if i.note > 50 %}
+                                                                <td>
+                                                                    <span class="badge badge-pill badge-success">pass</span>
+                                                                </td>
+                                                                {% else %}
+                                                                <td>
+                                                                    <span class="badge badge-pill badge-danger">fail</span>
+                                                                </td>
+                                                                {% endif %}
+                                                            
+                                                            
+                                                                <td>
+                                                                    <!-- calc( {{ item.quizz.note}} *100 ) / {{ item.quizz.quizz.nbq }}  -->
+                                                                    {{ i.note }} %
+                                                                </td>
+                                                            </tr>
+                                                            {% endif %}
+                                                            
+                                                            
+                                                            
+                                                            
+                                                        {% endfor %}
+                                                    {% endfor %}
+                                                        
+                                                    
+                                                                
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                        
+                        
+    </div>
+</div>
+<br><br><br><br><br><br><br>
+
+{% endblock content %}
+
+{% block javaScript %}
+
+<script src="/static/ressources/js/bootstrap.min.js"></script>
+<script src="/static/ressources/js/main.js"></script>
+
+<!-- script ****************************************** -->
+<script src="/static/ressources/js/datatable/datatable.init.js"></script>
+<script src="/static/ressources/js/datatable/datatable.js"></script>
+<script src="/static/ressources/js/datatable/datatable.basic.js"></script>
+<script src="/static/ressources/js/datatable/datatable.advanced.js"></script>
+       
+{% endblock javaScript %}

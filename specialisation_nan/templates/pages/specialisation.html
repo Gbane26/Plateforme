@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title> NaN - concours </title>
+
+        <!-- stylesheet ***************************************** -->
+        <link rel="stylesheet" href="/static/ressources/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/ressources/css/main.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="/static/vue/axios.min.js"></script>
+
+        <!-- favicons  ****************************************** -->
+        <link rel="apple-touch-icon" sizes="57x57" href="/static/ressources/images/favicons.ico/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="/static/ressources/images/favicons.ico//apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/static/ressources/images/favicons.ico//apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/static/ressources/images/favicons.ico//apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/static/ressources/images/favicons.ico//apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/static/ressources/images/favicons.ico//apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/static/ressources/images/favicons.ico//apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/static/ressources/images/favicons.ico//apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/ressources/images/favicons.ico//apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="/static/ressources/images/favicons.ico//android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/ressources/images/favicons.ico//favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="/static/ressources/images/favicons.ico//favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/ressources/images/favicons.ico//favicon-16x16.png">
+        <link rel="manifest" href="/static/ressources/images/favicons.ico//manifest.json">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="/static/images/favicons.ico/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+
+        <!-- jquery ******************************************** -->
+        <script src="/static/ressources/js/jquery.min.js"></script>
+
+        <style>
+            .ourspecialite{
+                background-color:var(--cec-white);
+                border-radius: 7px;
+                font-size: 1.5rem;
+                margin-bottom: 7rem;
+            }
+
+            .crecilia{
+                background: url(/static/ressources/images/landscape.jpg);
+                background-size: cover;
+                border-top-left-radius: 7px;
+                border-bottom-left-radius: 7px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding-left: 3rem;
+                padding-right: 0;
+            }
+            .description{
+                background: linear-gradient(90deg,#ffffffb7,#fff,#fff);
+                padding: 2rem;
+                border-top-left-radius: 7px;
+                border-bottom-left-radius: 7px;
+                width: 90%;
+                height:90%;
+                overflow: auto;
+            }
+            
+            .crecilia p{
+                color: var(--cec-text-color);
+                font-weight: bold;
+            }
+            @media screen and (max-width: 768px){
+                .crecilia{
+                    min-height: 20rem;
+                    border-bottom-left-radius: 0px;
+                    border-top-right-radius: 7px;
+                }
+
+                .crecilia p{
+                    margin: 2rem 0;
+                    font-size: 1.4rem;
+                }
+            }
+        </style>
+
+
+    </head>
+    <body>
+        <section class="main u-pd-10">
+            <div class="main-navbar">
+                <div id="user-circle" class="profil" style="background: url({{ user_profile.images.url }}) center no-repeat; background-size: cover;">&nbsp;</div>
+                <div id="dropdown-user" class="profil-dropdown"  >
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'profil' %}">Profile</a></li>
+                        <li><a href="{% url 'deconnexion' %}">Déconnexion</a></li>
+                    </ul>
+                </div>
+                <p class="nan" >Not A Number</p>
+
+            </div>
+            <div class="course-box">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="note my-shadow  center-content mb-5">
+                            <h3 class="mb-0">Spécialisation</h3>
+                        </div>
+                    </div>
+                </div>
+            <div class="container" id="specia">
+                    <div class="row ourspecialite">
+                    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 crecilia">
+                        <div class="description">
+                            <div v-html="decription_specialite" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 p-5">
+                        <div class="new">
+                            
+                            <form method="post" v-on:keyup.enter.prevent="demande_specialite">
+                                {% for s in special %}
+                                    <p>
+                                        <input v-model="demande" type="radio" id="{{s.id}}" value="{{ s.id }}">
+                                        <label for="{{s.id}}">{{ s.nom|upper }}</label>
+                                    </p>
+                                {% endfor %}
+                                <button v-show="demande!=0" type="submit" v-on:click.prevent="demande_specialite" class="btn1"> valider</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="copyright">
+                <h4>plateforme concours</h4>
+                <h5>© DevsFront - Not A Number</h5>
+            </div>
+        </section>
+        
+        <!-- script ****************************************** -->
+        <script src="/static/ressources/js/bootstrap.min.js"></script>
+        <script src="/static/ressources/js/main.js"></script>
+        
+        <script>
+            new Vue({
+                el: '#specia',
+                data: {
+                    demande: '0',
+                    special_url: "{% url 'special' %}",
+                    description: {"0":`<p>Nous vous invitons, pour la suite du concours, à choisir une spécialité.</p>`, {% for s in special %}"{{ s.id }}":`{{ s.description|safe }}`,{% endfor %}},
+                    base_url: window.location.protocol + "//" + window.location.host,
+                },
+                delimiters: ["${", "}"],
+                mounted() {
+                },
+                computed:{
+                    decription_specialite:function(){
+                        return this.description[this.demande]
+                    }
+                },
+                methods: {
+                    demande_specialite: function(){
+                        axios.defaults.xsrfCookieName = 'csrftoken'
+                        axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Votre spécialisation a bien été enregistré',
+                            showConfirmButton: false,
+                            showClass: {
+                                popup: 'animated fadeInDown faster'
+                            },
+                            hideClass: {
+                                popup: 'animated fadeOutUp faster'
+                            }
+                        })
+                        axios.post(this.base_url + this.special_url, {
+                            demande: '' + this.demande,
+                        }).then(response => {
+                            console.log(response)
+                            if (response.data.success) {
+                                window.location.replace(this.base_url);
+                            }else{
+                                window.location.replace(this.base_url)
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        })
+                    }
+                },
+            });
+        </script>
+
+    </body>
+</html>

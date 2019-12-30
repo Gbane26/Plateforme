@@ -1,0 +1,141 @@
+{% extends "bases/home.html" %}
+{% block title %}
+NaN - Concours : Bienvenu(e)!
+{% endblock title %}
+{% block style %}
+
+<link rel="stylesheet" href="/static/ressources/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/ressources/css/main.css">
+
+{% endblock style %}
+
+{% block jquery %}
+<script src="/static/ressources/js/jquery.min.js"></script>
+{% endblock jquery %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <!-- <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+            <a href="test1.html">
+                    <div class="card test-card mb-4">
+                        <div class="illustration center-content">
+                            <img src="/static/ressources/images/svg/quiz.svg" class="img-fluid" style="max-height: 130px">
+                        </div>
+                        <h1>test 1</h1>
+                    </div>
+            </a>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                <a href="test2.html">
+                    <div class="card test-card mb-4 ">
+                        <div class="illustration center-content">
+                            <img src="/static/ressources/images/svg/hello.svg" class="img-fluid" style="max-height: 130px">
+                        </div>
+                        <h1>test 2</h1>
+                    </div>
+            </a>
+            </div> -->
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                <a href="{% url 'specialite' %}">
+                    <div class="card test-card mb-4">
+                        <div class="illustration center-content">
+                            <img src="/static/ressources/images/svg/playground.svg" class="img-fluid" style="max-height: 130px">
+                        </div>
+                        <h1>test 3</h1>
+                        <p class="home-card_subtitle text-center">cursus {{ specialite.nom }}</p>
+                    </div>
+            </a>
+
+            <!-- Modal -->
+                <!-- <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h3 class="modal-title" id="exampleModalLongTitle">Spécialisation</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="note center-content u-pd-10 mb-5">
+                                <h4 class="mb-0" style="font-weight: bold;text-align: center;width: 80%; margin: auto; color: #13b1b1;line-height: 2.3rem;">
+                                    Pour la suite de l'aventure, vous devez choisir une
+                                    spécialité dans laquelle vous souhaiteriez poursuivre
+                                    l'aventure nanienne
+                                </h4>
+                            </div>
+                                        
+                                <div class="new">
+                                    <form action="#">
+                                        <p>
+                                            <input type="radio" id="test1" name="radio-group" checked>
+                                            <label for="test1">Front end</label>
+                                        </p>
+                                        <p>
+                                            <input type="radio" id="test2" name="radio-group">
+                                            <label for="test2">Javascript backend</label>
+                                        </p>
+                                        <p>
+                                            <input type="radio" id="test3" name="radio-group">
+                                            <label for="test3">Python (django)</label>
+                                        </p>
+                                        <button type="submit" class="btn1"> valider</button>
+                                    </form>
+                                </div>
+                        </div>
+                    </div>
+                    </div>
+                </div> -->
+
+            </div>
+        </div>
+    </div>
+    <br><br><br><br><br><br><br>
+
+{% endblock content %}
+
+{% block javaScript %}
+
+<script src="/static/ressources/js/bootstrap.min.js"></script>
+<script src="/static/ressources/js/main.js"></script>
+
+{% endblock javaScript %}
+
+{% block vue %}
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            base_url:window.location .protocol + "//" + window.location.host + "/",
+        },
+        delimiters:["${","}"],
+        mounted(){
+            
+        },
+        methods: {
+            index:function(){
+                this.base_url = 'https://localhost:8000'
+                console.log('data getting')
+                axios.defaults.xsrfCookieName = 'csrftoken'
+                axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+                axios({
+                    url: this.base_url + '/graphql',
+                    method: 'post',
+                    data: {
+                        query: `
+                            
+                        ` 
+                    }
+                })
+                .then(response => {
+                    
+                })  
+                .catch((err) => {
+                    console.log(err);
+                })
+            },
+    }
+});
+</script>
+{% endblock vue %}

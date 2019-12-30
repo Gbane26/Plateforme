@@ -1,0 +1,58 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+<!-- Override extrahead to add Chart.js -->
+{% block content %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+
+<div id="main" style="width: 100%;height:400px;" class="m-4"></div>
+<hr><hr>
+
+
+<script src="/static/echarts.min.js"></script>
+
+<script type="text/javascript">
+    // based on prepared DOM, initialize echarts instance
+    var myChart = echarts.init(document.getElementById('main'));
+
+    // specify chart configuration item and data
+    var option = {
+        title: {
+            text: 'ECharts entry example'
+        },
+        tooltip: {},
+        legend: {
+            data:['Sales']
+        },
+        xAxis: {
+            data: [
+                {% for m in chart_data %}
+                "{{m.quizzuser}}",
+                {% endfor %}
+            ]
+        },
+        yAxis: {},
+        series: [{
+            name: 'Sales',
+            type: 'bar',
+            data: [
+                {% for m in chart_data %}
+                "{{m.reponses}}",
+                {% endfor %}
+            ]
+        }]
+    };
+
+   
+
+    // use configuration item and data specified to show chart
+    myChart.setOption(option);
+</script>
+
+<!-- Render our chart -->
+
+
+<!-- Render the rest of the ChangeList view -->
+{{ block.super }}
+{% endblock %}

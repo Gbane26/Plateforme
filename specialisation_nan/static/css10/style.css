@@ -1,0 +1,73 @@
+
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body{
+	background: url("../images/bg-cubes.png");
+	font-size: 16px;
+	font-family: "Alatsi";
+	height: 100vh;
+}
+
+.main{
+	margin-top: 10rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.content{ 
+	max-width: 40rem;
+	height: 40rem;
+	background: red;
+	box-shadow:0 1px 6px 0 rgba(32, 33, 36, .28);
+	border-radius:7px;
+	display: grid;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	background:linear-gradient(rgba(0, 0, 0, 0.66),rgba(0, 0, 0, 0.53)), url('../images/home.jpg')no-repeat center;
+	background-size: cover;
+	padding: 2rem 1.5rem;
+}
+
+.content h1{
+	color: white;
+	text-transform: uppercase;
+}
+
+.succes{
+	width: 10rem;
+	height: 10rem;
+	margin-bottom: 10rem;
+	margin-top: -10rem;
+}
+
+footer{
+	margin-top: 2rem;
+	text-align: center;
+}
+
+footer p{
+	margin-bottom: 1rem;
+	font-size: 1.3rem;
+	color: #000;
+}
+
+@media screen and (max-width:510px){
+	body{
+		height: 100vh;
+		
+	}
+	.content{
+		height: 60rem;
+		min-width: 100% !important;
+	}
+
+	footer p{
+
+	}
+}

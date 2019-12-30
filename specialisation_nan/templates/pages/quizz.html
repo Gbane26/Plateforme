@@ -1,0 +1,263 @@
+{% extends "bases/base_up.html" %}
+{% block title %}
+NaN - Concours : Passer votre quiz!
+{% endblock title %}
+{% block style %}
+
+<link rel="stylesheet" href="/static/ressources/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/ressources/css/slick.min.css">
+<link rel="stylesheet" href="/static/ressources/css/main.css">
+
+{% endblock style %}
+
+{% block jquery %}
+<script src="/static/ressources/js/jquery.min.js"></script>
+{% endblock jquery %}
+
+{% block content %}
+    <div class="quiz-box" id="app">
+        <div class="row">
+            <div class="col-12">
+                <div class="my-shadow card mb-5 quiz-header">
+                    <h3 >Quiz 1</h3>
+                    <h4 class="mb-0">Cursus front-end</h4>
+                </div>
+            </div>
+                <div class="col-xs-12 col-sm-12 col-md-7 col-lg-8 col-xl-8">
+                    <div class="my-shadow card quiz-card mb-4">
+                        <div class="carousel-controls testimonial-carousel-controls ">
+                            <div class="d-flex mb-5">
+                                <div class="control prev">
+                                    <button class="btn1">
+                                        <img src="/static/ressources/images/svg/arrow-point-to-right.svg" class="img-fluid" style="max-height: 2rem; transform: rotate(180deg);" alt="">
+                                    </button>
+                                </div>
+                                <div class="control next">
+                                    <button class="btn1">
+                                        <img src="/static/ressources/images/svg/arrow-point-to-right.svg" class="img-fluid" style="max-height: 2rem;" alt="">
+                                    </button>
+                                </div>
+                            </div>
+                                <div class="testimonial-carousel">
+                                    
+                                        {% for q in quizz.questions.all %}
+                                        {% with checkbox=q.question.ischeckbox %}
+                                        <div class="h5 font-weight-normal one-slide mx-auto">
+                                            <div class="testimonial  px-3 d-flex flex-direction-column justify-content-center flex-wrap ">
+                                                <div style="width: 100%;">
+                                                    <span class="badge badge-secondary badge-question">Question {{ forloop.counter }}</span>
+                                                    <br><br>
+                                                    <p class="quiz-question">
+                                                        {{ q.question.contenu|safe }}
+                                                    </p>
+                                                    <br><hr><br>
+                                                    <div class="new">
+                                                        <form>
+                                                        {% for reponse in q.question.reponses.all  %}
+                                                            <div class="form-groupe">
+                                                                {% if checkbox %}
+                                                                <input type="checkbox" id="{{ reponse.id }}" v-model="reponse_user{{ q.id }}" value="{{ reponse.id }}">
+                                                                <label for="{{ reponse.id }}" style="display: inline-flex;">{{ reponse.contenu|safe }}</label>
+                                                                {% else %}
+                                                                <input type="radio" id="{{ reponse.id }}" name="{{ q.id }}" v-model="reponse_user{{ q.id }}" value="{{ reponse.id }}">
+                                                                <label for="{{ reponse.id }}">{{ reponse.contenu|safe }}</label>
+                                                                {% endif %}
+                                                            </div>
+                                                        {% endfor %}
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endwith %}
+                                        {% endfor %}
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4 col-xl-4">
+                    <div class="my-shadow card quiz-card">
+                        <div class="timer-quiz mb-5 center-content">
+                            <h1 class="mb-0 time">{{ quizz.quizz.duree }}:00</h1>
+                        </div>
+                        <div class="d-flex" style="flex-wrap: wrap;">
+                            {% for q in quizz.questions.all %}
+                            <a href="#" v-bind:class="answered{{ q.id }}" class="qestion-number" @click.prevent="gotoquestion({{ forloop.counter }})">
+                                <div>{{ forloop.counter }}</div>
+                            </a>
+                            {% endfor %}
+                        </div>
+                        <div class="mt-3 mb-5">
+                            <button class="btn1" data-toggle="modal" data-target="#exampleModalCenter">Soumettre</button>
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Cursus front-end</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Êtes-vous sûr de vouloir valider vos réponses?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn1" data-dismiss="modal">retour</button>
+                                    <button type="button" class="btn1 soumission" data-dismiss="modal" data-toggle="modal" data-target="#exampleModalCenterTwo" v-on:click="validequizz">valider</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModalCenterTwo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-body text-center">
+                                            <img src="/static/ressources/images/svg/sent.svg" class="img-fluid" alt="sent" style="max-height: 20rem;">
+                                            <h3 class="mt-4">Votre quiz a été soumis avec succès</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        <h5 class="mb-0" style="color: #661058;font-weight: bold;">Consigne</h5>
+                        <h5>
+                            - Assurer vous de ne pas quitter votre page de composition et aussi de ne pas recharger la page sous peine de voir votre compo s'arreter
+                            - Assurer d'avoir une bonne connexion pour le bon deroulement de la composition 
+                            - Toutes entravent a ces consignes seront noté comme faudre
+                            - Aussi si vous quittez votre page de compo sans soumettre, elle sera automatiquement enregistré ...
+                        </h5>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <br><br><br><br><br><br><br>
+
+{% endblock content %}
+
+{% block javaScript %}
+
+<script src="/static/ressources/js/bootstrap.min.js"></script>
+<script src="/static/ressources/js/slick.min.js"></script>
+<script src="/static/ressources/js/main.js"></script>
+
+
+{% endblock javaScript %}
+
+{% block vue %}
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            invalide:false,
+            inter:'',
+            message:'',
+            {% for q in quizz.questions.all %}reponse_user{{ q.id }}: {% if q.question.ischeckbox %}[]{% else %}''{% endif %},{% endfor %}
+            q_date: '{{ quizz.date_add }}',
+            profil_url: "{% url 'profil' %}",
+            base_url:window.location.protocol + "//" + window.location.host,
+            post_url: "{% url 'quizz_valider' epreuve.nom %}",
+            slider: '',
+        },watch: {{% for q in quizz.questions.all %}
+            reponse_user{{ q.id }}: function (value) {
+                this.post_reponse({{ q.id }}, value)
+            },{% endfor %}
+        },
+        computed: {{% for q in quizz.questions.all %}
+            answered{{ q.id }}: function () {
+                return {'answered': this.reponse_user{{ q.id }}.length >0}
+            },{% endfor %}
+        },
+        components: {
+            'quizz': httpVueLoader('/static/components/quizz.vue'),
+        },
+        delimiters: ["${", "}"],
+        mounted() {
+            this.slider =$(".testimonial-carousel").slick({
+                infinite: true,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: false,
+                arrows: true,
+                autoplaySpeed: 5000,
+                prevArrow: $(".testimonial-carousel-controls .prev"),
+                nextArrow: $(".testimonial-carousel-controls .next")
+            });
+            this.decompte()
+        },
+        methods: {
+            gotoquestion:function(num){
+                this.slider.slick('slickGoTo', num-1)
+            },
+            decompte:function(){
+                let time = document.querySelector('.time');
+                let tab = time.textContent.split(':');
+                let minu = parseInt(tab[1])
+                let sec = parseInt(tab[2])
+                let outputSec,outputMin;
+                this.inter = setInterval(()=>{
+                        sec--;
+                        if(minu > 0){
+                            if(sec == -1){
+                                sec = 59;
+                                minu--;
+                            }
+                        }else{
+                            if(sec === 0){
+                                clearInterval(this.inter);
+                                document.querySelector('.soumission').click();
+                            }
+                        }
+                        outputSec = sec < 10 ? "0"+sec : sec;
+                        outputMin = minu < 10 ? "0"+minu : minu
+                        time.textContent = "00:"+outputMin+":"+outputSec;
+                },1000);
+            },
+            post_reponse:function(pk, value){
+                if(!this.invalide){
+                    axios.defaults.xsrfCookieName = 'csrftoken'
+                    axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+                    axios.post(this.base_url + this.post_url, {
+                        reponse_user: '' + pk,
+                        value: value,
+                    }).then(response => {
+                        console.log(response)
+                        if (response.data.success) {
+                            console.log(response.data)
+                        } else {
+                            console.log('échoué')
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+                }
+            },
+            validequizz:function(){
+                if(!this.invalide){
+                    this.invalide = true
+                    clearInterval(this.inter)
+                    axios.defaults.xsrfCookieName = 'csrftoken'
+                    axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+                    axios.get(this.base_url + this.post_url)
+                    .then(response => {
+                        console.log(response)
+                        if (response.data.success) {
+                            window.location.replace(this.base_url + this.profil_url)
+                        } else {
+                            console.log('échoué')
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+                }
+            }
+        },
+    });
+</script>
+{% endblock vue %}

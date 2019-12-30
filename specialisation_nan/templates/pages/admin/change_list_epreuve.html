@@ -1,0 +1,70 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+<!-- Override extrahead to add Chart.js -->
+{% block content %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+
+<div id="main" style="width: 100%;height:400px;" class="m-4"></div>
+<hr><hr>
+
+
+<script src="/static/echarts.min.js"></script>
+
+<script type="text/javascript">
+    // based on prepared DOM, initialize echarts instance
+    var myChart = echarts.init(document.getElementById('main'));
+
+    // specify chart configuration item and data
+   
+    var option = {
+        title : {
+            text: 'Graph de Quiz par Note',
+            subtext: '纯属虚构',
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: ['{{m.quizz}}',
+            {% endfor %}
+            ]
+        },
+        series : [
+            {
+                name: 'Epreuve',
+                type: 'pie',
+                radius : '55%',
+                center: ['50%', '60%'],
+                data:[
+                    {% for m in chart_data %}
+                    {value:1, name:'{{m.}}'},
+                    {% endfor %}
+                    
+                ],
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+    // use configuration item and data specified to show chart
+    myChart.setOption(option);
+</script>
+
+<!-- Render our chart -->
+
+
+<!-- Render the rest of the ChangeList view -->
+{{ block.super }}
+{% endblock %}

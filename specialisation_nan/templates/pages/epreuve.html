@@ -1,0 +1,119 @@
+{% extends "bases/base_up.html" %}
+
+{% block title %}
+    NaN - Concours : Mes Cours!
+{% endblock title %}
+{% block style %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<link rel="stylesheet" href="/static/ressources/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/ressources/css/main.css">
+<style>
+    .lds-ripple {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+        }
+        .lds-ripple div {
+        position: absolute;
+        border: 4px solid black;
+        opacity: 1;
+        border-radius: 50%;
+        animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+        }
+        .lds-ripple div:nth-child(2) {
+        animation-delay: -0.5s;
+        }
+        @keyframes lds-ripple {
+        0% {
+            top: 36px;
+            left: 36px;
+            width: 0;
+            height: 0;
+            opacity: 1;
+        }
+        100% {
+            top: 0px;
+            left: 0px;
+            width: 72px;
+            height: 72px;
+            opacity: 0;
+        }
+        }
+        
+</style>
+
+{% endblock style %}
+
+{% block jquery %}
+<script src="/static/ressources/js/jquery.min.js"></script>
+{% endblock jquery %}
+
+{% block content %}
+    <!-- <div class="lds-ripple" v-if="mask" style="width: 100%; height: 100%; background-color: black; display: flex; align-items: center; justify-content: center; z-index: 10000;"><div></div><div></div></div> -->
+<div id="app">
+<div class="course-box">
+    <div class="row">
+        <div class="col-12">
+            <div class="note my-shadow  center-content mb-5">
+                <h3 class="mb-0">Test de spécialisation</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {% for epreuve in specialite.epreuve_specialite.all %}
+        <div class="col-xs-8 col-sm-8 col-md-4 col-lg-4">
+            <a href="{% url 'epreuve' epreuve.nom %}">
+                <div class="card c-my-card mb-3">
+                    <h3>{{ epreuve.nom }}</h3>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+        
+        
+    </div>
+</div>
+</div>
+<br><br><br><br><br><br><br>
+
+{% endblock content %}
+
+{% block javaScript %}
+
+<script src="/static/ressources/js/bootstrap.min.js"></script>
+<script src="/static/ressources/js/main.js"></script>
+
+{% endblock javaScript %}
+
+
+
+    
+{% block vue %}
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            base_url:'',
+            
+        },
+        delimiters:["${","}"],
+        mounted(){
+            {% if alert %}
+            Swal.fire({
+                icon: 'info',
+                title: '{{ alert }}',
+                showConfirmButton: false,
+                showClass: {
+                    popup: 'animated fadeInDown faster'
+                },
+                hideClass: {
+                    popup: 'animated fadeOutUp faster'
+                }
+            })
+            {% endif %}
+        },
+});
+</script>
+{% endblock vue %}
+    
